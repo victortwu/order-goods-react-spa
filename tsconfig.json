@@ -1,4 +1,7 @@
 {
+   "compilerOptions": {
+    "types": ["vitest/globals"], // Add Vitest types globally
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
