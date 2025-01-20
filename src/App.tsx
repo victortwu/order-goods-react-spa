@@ -1,25 +1,46 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-// import "./App.css";
+import { Authenticator } from "@aws-amplify/ui-react";
+import { useEffect } from "react";
+import { SignInHeader } from "./signinCustomUI/components/SignInHeader";
+import { formOverrides } from "./signinCustomUI/constants";
 import "@cloudscape-design/global-styles/index.css";
 import { Button } from "@cloudscape-design/components";
+import { useUser } from "./contexts/UserContext/UserProvider";
 
-function App() {
-  const [count, setCount] = useState(0);
+const baseUrl = import.meta.env.VITE_BASE_URL;
+
+export const App = () => {
+  const { user, isAdmin, loading } = useUser();
+
+  // just to test connection for now
+  useEffect(() => {
+    fetch(`${baseUrl}/prod/goods`)
+      .then((res) => res.json())
+      .then(console.log);
+  }, []);
 
   return (
-    <>
-      <div className="card">
-        <Button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-    </>
+    <Authenticator
+      variation="modal"
+      formFields={formOverrides}
+      components={{ Header: SignInHeader }}
+    >
+      {({ signOut }) => {
+        return (
+          <div>
+            <h1>Welcome, {user?.userId}!</h1>
+            {loading ? (
+              <h2>...loading user group.</h2>
+            ) : (
+              <h2>
+                {isAdmin
+                  ? "You have Admin Privileges"
+                  : "You are a Regular User"}
+              </h2>
+            )}
+            <Button onClick={signOut}>Sign Out</Button>
+          </div>
+        );
+      }}
+    </Authenticator>
   );
-}
-
-export default App;
+};
