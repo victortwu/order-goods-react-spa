@@ -1,16 +1,18 @@
 import { useEffect } from "react";
+import { Routes, Route } from "react-router";
 import { Authenticator } from "@aws-amplify/ui-react";
 import { formOverrides } from "./signinCustomUI/constants";
-import { useUser } from "./contexts/UserContext/UserProvider";
 import { SignInHeader } from "./signinCustomUI/components/SignInHeader";
-import { AppLayout, TopNavigation } from "@cloudscape-design/components";
+import {
+  AppLayout,
+  SideNavigation,
+  TopNavigation,
+} from "@cloudscape-design/components";
 import "@cloudscape-design/global-styles/index.css";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 export const App = () => {
-  const { user, isAdmin, loading } = useUser();
-
   // just to test connection for now
   // https://docs.amplify.aws/gen1/react/build-a-backend/restapi/restapi-v5-to-v6-migration-guide/
   useEffect(() => {
@@ -39,19 +41,23 @@ export const App = () => {
               ]}
             />
             <AppLayout
+              navigation={
+                <SideNavigation
+                  header={{
+                    href: "#",
+                    text: "Order Goods",
+                  }}
+                  items={[
+                    { type: "link", text: `Home`, href: `/` },
+                    { type: "link", text: `List`, href: `/list` },
+                  ]}
+                />
+              }
               content={
-                <div>
-                  <h1>Welcome, {user?.userId}!</h1>
-                  {loading ? (
-                    <h2>...loading user group.</h2>
-                  ) : (
-                    <h2>
-                      {isAdmin
-                        ? "You have Admin Privileges"
-                        : "You are a Regular User"}
-                    </h2>
-                  )}
-                </div>
+                <Routes>
+                  <Route path="/" element={<div>Home</div>} />
+                  <Route path="/list" element={<div>List</div>} />
+                </Routes>
               }
             />
           </>
