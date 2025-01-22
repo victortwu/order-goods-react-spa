@@ -13,9 +13,11 @@ type UserContextType = {
   loading: boolean;
 };
 
-export const UserContext = createContext<UserContextType | undefined>(
-  undefined
-);
+export const UserContext = createContext<UserContextType>({
+  user: null,
+  isAdmin: false,
+  loading: false,
+});
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any | null>(null);
@@ -51,10 +53,4 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useUser = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useUser must be used within a UserProvider");
-  }
-  return context;
-};
+export const useUser = () => useContext(UserContext);

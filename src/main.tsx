@@ -6,7 +6,6 @@ import { App } from "./App.tsx";
 import { theme } from "./Theme.ts";
 import { applyTheme } from "@cloudscape-design/components/theming";
 import { UserProvider } from "./contexts/UserContext/UserProvider.tsx";
-
 import "@aws-amplify/ui-react/styles.css";
 
 Amplify.configure(awsconfig);
