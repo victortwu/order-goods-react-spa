@@ -1,17 +1,21 @@
-import { TopNavigation } from "@cloudscape-design/components";
+import {
+  TopNavigation,
+  TopNavigationProps,
+} from "@cloudscape-design/components";
+import { APP_NAME } from "../../constants/globalConstants";
 
-type CustomTopNavigationProps = {
+interface CustomTopNavigationProps {
   signOut: ((data?: any | undefined) => void) | undefined;
-  title: string;
-};
+  identity?: TopNavigationProps.Identity;
+}
 
 export const CustomTopNavigation = ({
   signOut,
-  title,
+  identity = { href: "/", title: APP_NAME },
 }: CustomTopNavigationProps) => {
   return (
     <TopNavigation
-      identity={{ href: "/", title }}
+      identity={identity}
       utilities={[
         {
           type: "menu-dropdown",

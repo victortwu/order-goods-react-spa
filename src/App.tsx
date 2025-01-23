@@ -1,11 +1,12 @@
 import { useEffect } from "react";
-import { Routes, Route } from "react-router";
 import { Authenticator } from "@aws-amplify/ui-react";
+import { AppLayout } from "@cloudscape-design/components";
 import { formOverrides } from "./signinCustomUI/constants";
 import { SignInHeader } from "./signinCustomUI/components/SignInHeader";
 import { CustomTopNavigation } from "./components/CustomTopNavigation/CustomTopNavigation";
-import { AppLayout, SideNavigation } from "@cloudscape-design/components";
+import { PageContentRoutes } from "./routes/pageContentRoutes/PageContentRoutes";
 import "@cloudscape-design/global-styles/index.css";
+import { CustomSideNavigation } from "./components/CustomSideNavigation/CustomSideNavigation";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -27,26 +28,10 @@ export const App = () => {
       {({ signOut }) => {
         return (
           <>
-            <CustomTopNavigation title="Order Goods" signOut={signOut} />
+            <CustomTopNavigation signOut={signOut} />
             <AppLayout
-              navigation={
-                <SideNavigation
-                  header={{
-                    href: "#",
-                    text: "Order Goods",
-                  }}
-                  items={[
-                    { type: "link", text: `Home`, href: `/` },
-                    { type: "link", text: `List`, href: `/list` },
-                  ]}
-                />
-              }
-              content={
-                <Routes>
-                  <Route path="/" element={<div>Home</div>} />
-                  <Route path="/list" element={<div>List</div>} />
-                </Routes>
-              }
+              navigation={<CustomSideNavigation />}
+              content={<PageContentRoutes />}
             />
           </>
         );
