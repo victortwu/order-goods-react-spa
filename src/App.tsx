@@ -3,11 +3,8 @@ import { Routes, Route } from "react-router";
 import { Authenticator } from "@aws-amplify/ui-react";
 import { formOverrides } from "./signinCustomUI/constants";
 import { SignInHeader } from "./signinCustomUI/components/SignInHeader";
-import {
-  AppLayout,
-  SideNavigation,
-  TopNavigation,
-} from "@cloudscape-design/components";
+import { CustomTopNavigation } from "./components/CustomTopNavigation/CustomTopNavigation";
+import { AppLayout, SideNavigation } from "@cloudscape-design/components";
 import "@cloudscape-design/global-styles/index.css";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -30,16 +27,7 @@ export const App = () => {
       {({ signOut }) => {
         return (
           <>
-            <TopNavigation
-              identity={{ href: "#", title: "Order Goods" }}
-              utilities={[
-                {
-                  type: "button",
-                  text: "Sign Out",
-                  onClick: signOut,
-                },
-              ]}
-            />
+            <CustomTopNavigation title="Order Goods" signOut={signOut} />
             <AppLayout
               navigation={
                 <SideNavigation
