@@ -3,6 +3,7 @@ import {
   TopNavigationProps,
 } from "@cloudscape-design/components";
 import { APP_NAME } from "../../constants/globalConstants";
+import { useDarkMode } from "../../contexts/ThemeProvider/ThemeContext";
 
 interface CustomTopNavigationProps {
   signOut: ((data?: any | undefined) => void) | undefined;
@@ -13,10 +14,16 @@ export const CustomTopNavigation = ({
   signOut,
   identity = { href: "/", title: APP_NAME },
 }: CustomTopNavigationProps) => {
+  const { isDark, toggleTheme } = useDarkMode();
   return (
     <TopNavigation
       identity={identity}
       utilities={[
+        {
+          type: "button",
+          text: `${isDark ? "Light" : "Dark"}`,
+          onClick: toggleTheme,
+        },
         {
           type: "menu-dropdown",
           text: "Account",
