@@ -30,6 +30,7 @@ export const App = () => {
           <>
             <CustomTopNavigation signOut={signOut} />
             <AppLayout
+              toolsHide
               navigation={<CustomSideNavigation />}
               content={<PageContentRoutes />}
             />
