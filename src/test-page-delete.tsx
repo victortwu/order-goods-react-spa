@@ -34,17 +34,17 @@ export const TestPage = () => {
           sections: [
             {
               id: "description",
-              header: "Description",
+              header: <Header variant="h3">Details</Header>,
               content: (item) => item.description,
             },
             {
               id: "type",
-              header: "Type",
+              header: <Header variant="h3">Type</Header>,
               content: (item) => item.type,
             },
             {
               id: "size",
-              header: "Size",
+              header: <Header variant="h3">Size</Header>,
               content: (item) => item.size,
             },
           ],
