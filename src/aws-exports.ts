@@ -25,6 +25,15 @@ const awsconfig = {
       // },
     },
   },
+  API: {
+    REST: {
+      // Replace with the API URL from CDK
+      OrderGoodsApi: {
+        endpoint: `${import.meta.env.VITE_BASE_URL}/prod`,
+        region: "us-west-2",
+      },
+    },
+  },
 };
 
 export default awsconfig;
