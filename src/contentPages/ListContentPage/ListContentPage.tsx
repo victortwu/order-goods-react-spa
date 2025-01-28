@@ -1,8 +1,10 @@
 import { useEffect } from "react";
-import { createList } from "../../api/data-fetching/createList";
 import { ListPayload } from "../../constants/types/list";
+import { useCreateList } from "../../api/hooks/useCreateList";
 
 export const ListsContentPage = () => {
+  const { mutate } = useCreateList();
+
   const testPayload: ListPayload = {
     list: [
       {
@@ -12,7 +14,7 @@ export const ListsContentPage = () => {
         name: "TEST Ground Lamb",
         vendorID: "Restaurant Depot",
         category: "Food COGS",
-        qty: 3,
+        qty: 5,
         unitType: "unit",
       },
 
@@ -23,14 +25,14 @@ export const ListsContentPage = () => {
         name: "TEST Chicken",
         vendorID: "Restaurant Depot",
         category: "Food COGS",
-        qty: 7,
+        qty: 5,
         unitType: "case",
       },
     ],
   };
 
   //   useEffect(() => {
-  //     createList(testPayload);
+  //     mutate(testPayload);
   //   }, []);
 
   return <main>Lists Content Page</main>;
