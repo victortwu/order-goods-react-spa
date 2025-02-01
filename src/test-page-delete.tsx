@@ -1,11 +1,42 @@
-import {
-  Cards,
-  Button,
-  Link,
-  Box,
-  SpaceBetween,
-  Header,
-} from "@cloudscape-design/components";
+import { Button, SpaceBetween } from "@cloudscape-design/components";
+import { CardItems } from "./components/CardItems/CardItems";
+import { Product } from "./constants/types/product";
+
+const mockProductItems = [
+  {
+    upc: "abc123",
+    category: "Food COGS",
+    vendorID: "Restaurant Depot",
+    id: "a8960022-b23d-4d95-bfbe-10d8d74827bb",
+    hide: false,
+    name: "Chicken",
+    vendorProductName: "SOUR CREAM BULK JF",
+    qty: 1,
+    unitType: "case",
+  },
+  {
+    category: "Food COGS",
+    vendorID: "Restaurant Depot",
+    id: "ec4e85fb-f38b-4561-96fb-9104f7af00dc",
+    name: "Beef",
+    upc: "76069522997",
+    vendorProductName: "SOUR CREAM BULK JF",
+    hide: false,
+    // qty: 2,
+    // unitType: "case",
+  },
+  {
+    category: "Food COGS",
+    vendorID: "Restaurant Depot",
+    id: "259991a1-8007-48ae-89d7-fc160dcf6d36",
+    name: "Lamb",
+    upc: "72906299119",
+    vendorProductName: "PDU ITALIAN PARSLE Y",
+    hide: true,
+    // qty: 2,
+    // unitType: "case",
+  },
+] as Product[];
 
 export const TestPage = () => {
   return (
@@ -18,64 +49,7 @@ export const TestPage = () => {
         <Button iconName="calendar">Normal w Icon</Button>
       </SpaceBetween>
       <br />
-      <Cards
-        header={
-          <>
-            <Header>Example Cards</Header>
-            <Link href="#">Link</Link>
-          </>
-        }
-        ariaLabels={{
-          itemSelectionLabel: (e, t) => `select ${t.name}`,
-          selectionGroupLabel: "Item selection",
-        }}
-        cardDefinition={{
-          header: (item) => item.name,
-          sections: [
-            {
-              id: "description",
-              header: <Header variant="h3">Details</Header>,
-              content: (item) => item.description,
-            },
-            {
-              id: "type",
-              header: <Header variant="h3">Type</Header>,
-              content: (item) => item.type,
-            },
-            {
-              id: "size",
-              header: <Header variant="h3">Size</Header>,
-              content: (item) => item.size,
-            },
-          ],
-        }}
-        cardsPerRow={[{ cards: 1 }, { minWidth: 500, cards: 2 }]}
-        items={[
-          {
-            name: "Card Item 1",
-            alt: "First",
-            description: "This is the first item",
-            type: "1A",
-            size: "Small",
-          },
-          {
-            name: "Item 2",
-            alt: "Second",
-            description: "This is the second item",
-            type: "1B",
-            size: "Large",
-          },
-        ]}
-        loadingText="Loading resources"
-        empty={
-          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-            <SpaceBetween size="m">
-              <b>No resources</b>
-              <Button>Create resource</Button>
-            </SpaceBetween>
-          </Box>
-        }
-      />
+      <CardItems items={mockProductItems} isList={false} />
     </main>
   );
 };
