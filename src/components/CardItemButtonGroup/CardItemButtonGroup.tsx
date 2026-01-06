@@ -47,15 +47,24 @@ export const CardItemButtonGroup = ({
           return copyPrevItems;
         });
         break;
-      // todo: add toggleUnitType
-      case "toggleUnitType":
+      case "case":
         setNewItems((prevItems) => {
           const copyPrevItems: Product[] | ListItem[] = [...prevItems];
           const { idx, currentItem } = getCurrentIndexAndItem(copyPrevItems);
-          const isCase = currentItem?.unitType === "case";
           copyPrevItems[idx] = {
             ...currentItem,
-            unitType: isCase ? "unit" : "case",
+            unitType: "case",
+          } as Product;
+          return copyPrevItems;
+        });
+        break;
+      case "unit":
+        setNewItems((prevItems) => {
+          const copyPrevItems: Product[] | ListItem[] = [...prevItems];
+          const { idx, currentItem } = getCurrentIndexAndItem(copyPrevItems);
+          copyPrevItems[idx] = {
+            ...currentItem,
+            unitType: "unit",
           } as Product;
           return copyPrevItems;
         });
@@ -88,11 +97,13 @@ export const CardItemButtonGroup = ({
           text: "Add",
         },
         {
-          type: "icon-toggle-button",
-          id: "toggleUnitType",
-          iconName: "multiscreen", // to do: custom icon??  Or create independent button
-          text: "Toggle Unit Type",
-          pressed: false,
+          type: "menu-dropdown",
+          id: "selectUnit",
+          text: "Select unit type",
+          items: [
+            { itemType: "action", text: "Case", id: "case" },
+            { itemType: "action", text: "Unit", id: "unit" },
+          ],
         },
         ...(isList
           ? [

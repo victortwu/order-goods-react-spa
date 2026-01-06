@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import createWrapper from "@cloudscape-design/components/test-utils/dom";
 import { CustomTopNavigation } from "./CustomTopNavigation";
 import { describe, it, expect, vi } from "vitest";
@@ -21,15 +21,26 @@ describe("<CustomTopNavigation />", () => {
     const { container } = render(
       <CustomTopNavigation identity={testIdentity} signOut={mockSignOut} />
     );
-    expect(screen.getByRole("button")).toBeInTheDocument();
+
+    const wrapper = createWrapper(container);
+    const buttonDropdown = wrapper.findButtonDropdown()?.getElement();
+
+    expect(buttonDropdown).toBeInTheDocument();
+    expect(buttonDropdown?.innerHTML?.includes("Account")).toBeTruthy();
   });
 
   it("opens the dropdown menu when button is clicked", () => {
-    render(
+    const { container } = render(
       <CustomTopNavigation identity={testIdentity} signOut={mockSignOut} />
     );
-    const button = screen.getByRole("button");
-    fireEvent.click(button);
-    expect(screen.getByText("Sign Out")).toBeInTheDocument();
+
+    const wrapper = createWrapper(container);
+    const buttonDropdown = wrapper.findButtonDropdown();
+    buttonDropdown?.openDropdown();
+
+    const portal = createWrapper(document.body);
+    const openMenu = portal.findButtonDropdown()?.findOpenDropdown();
+    expect(openMenu).toBeTruthy();
+    expect(openMenu!.getElement().textContent).toMatch(/sign out/i);
   });
 });
