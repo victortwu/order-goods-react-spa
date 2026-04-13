@@ -1,0 +1,35 @@
+/*
+ * CSS custom properties mirror colorTokens in src/constants/designTokens.ts.
+ * When updating colors, update designTokens.ts first, then reflect here.
+ */
+
+:root,
+.theme-light {
+  --bg-main: #fff;
+  --bg-container: #f9f9f9;
+  --bg-header: #f1f1f1;
+  --text-primary: #333;
+  --text-secondary: #555;
+  --border-color: #ccc;
+}
+
+.theme-dark {
+  --bg-main: #333;
+  --bg-container: #222;
+  --bg-header: #1a1a1a;
+  --text-primary: #fff;
+  --text-secondary: #ddd;
+  --border-color: #555;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  margin: 0;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#root {
+  background-color: var(--bg-main);
+  min-height: 100vh;
+}

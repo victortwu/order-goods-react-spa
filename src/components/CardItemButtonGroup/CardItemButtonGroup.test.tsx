@@ -2,69 +2,110 @@ import createWrapper from "@cloudscape-design/components/test-utils/dom";
 import { render } from "@testing-library/react";
 import { describe, test, expect, vi } from "vitest";
 import { CardItemButtonGroup } from "./CardItemButtonGroup";
-import { ListItem } from "../../constants/types/list";
+import { OrderItem } from "../../constants/types/orderItem";
 
-describe("<Button/>", () => {
-  const mockItem = {
+const mockItem: OrderItem = {
+  id: "test-id-123",
+  productName: "Test Product",
+  qty: 2,
+  unitType: "case",
+  productData: {
+    id: "test-id-123",
+    name: "Test Product",
     category: "Test Category",
-    vendorID: "Test Vender ID",
-    name: "Test Name",
-    qty: 2,
-    unitType: "case",
-  } as ListItem;
+    vendorID: "Test Vendor",
+  },
+};
 
-  test("clicks on buttons when in order mode and 'remove' button is not present (isList = false)", () => {
+const baseProps = {
+  item: mockItem,
+  stagedQty: 2,
+  stagedUnitType: "case" as const,
+  onStageQty: vi.fn(),
+  onStageUnitType: vi.fn(),
+  onUpdate: vi.fn(),
+};
+
+describe("<CardItemButtonGroup />", () => {
+  test("goods mode: renders increment, decrement, unit select — no remove", () => {
     const { container } = render(
-      <CardItemButtonGroup
-        item={mockItem}
-        setNewItems={() => {}}
-        isList={false}
-      />
+      <CardItemButtonGroup {...baseProps} isList={false} />,
     );
-    const wrapper = createWrapper(container);
-
-    const buttonButtonGroup = wrapper.findButtonGroup();
-
-    const incrementButton = buttonButtonGroup?.findButtonById("increment");
-    incrementButton?.click();
-    const decrementButton = buttonButtonGroup?.findButtonById("decrement");
-    decrementButton?.click();
-    const removeButton = buttonButtonGroup?.findButtonById("remove");
-
-    expect(removeButton).toBeNull();
-
-    const toggleUnitButton =
-      buttonButtonGroup?.findButtonById("toggleUnitType");
-    toggleUnitButton?.click();
-
-    expect(buttonButtonGroup?.getElement()).toBeInTheDocument();
+    const group = createWrapper(container).findButtonGroup();
+    expect(group?.findButtonById("increment")).not.toBeNull();
+    expect(group?.findButtonById("decrement")).not.toBeNull();
+    expect(group?.findButtonById("remove")).toBeNull();
   });
 
-  test("clicks on buttons when in list mode (isList = true)", () => {
+  test("list mode: renders remove button in addition to increment/decrement", () => {
+    const { container } = render(
+      <CardItemButtonGroup {...baseProps} isList={true} onRemove={vi.fn()} />,
+    );
+    const group = createWrapper(container).findButtonGroup();
+    expect(group?.findButtonById("increment")).not.toBeNull();
+    expect(group?.findButtonById("decrement")).not.toBeNull();
+    expect(group?.findButtonById("remove")).not.toBeNull();
+  });
+
+  test("goods mode: increment calls onStageQty with qty + 1", () => {
+    const onStageQty = vi.fn();
     const { container } = render(
       <CardItemButtonGroup
-        item={mockItem}
-        setNewItems={() => {}}
-        isList={true}
-      />
+        {...baseProps}
+        isList={false}
+        onStageQty={onStageQty}
+      />,
     );
-    const wrapper = createWrapper(container);
+    createWrapper(container)
+      .findButtonGroup()
+      ?.findButtonById("increment")
+      ?.click();
+    expect(onStageQty).toHaveBeenCalledWith(3);
+  });
 
-    const buttonButtonGroup = wrapper.findButtonGroup();
+  test("goods mode: decrement does not go below 0", () => {
+    const onStageQty = vi.fn();
+    const { container } = render(
+      <CardItemButtonGroup
+        {...baseProps}
+        stagedQty={0}
+        isList={false}
+        onStageQty={onStageQty}
+      />,
+    );
+    createWrapper(container)
+      .findButtonGroup()
+      ?.findButtonById("decrement")
+      ?.click();
+    expect(onStageQty).toHaveBeenCalledWith(0);
+  });
 
-    const incrementButton = buttonButtonGroup?.findButtonById("increment");
-    incrementButton?.click();
-    const decrementButton = buttonButtonGroup?.findButtonById("decrement");
-    decrementButton?.click();
-    const removeButton = buttonButtonGroup?.findButtonById("remove");
+  test("list mode: remove calls onRemove with item id", () => {
+    const onRemove = vi.fn();
+    const { container } = render(
+      <CardItemButtonGroup {...baseProps} isList={true} onRemove={onRemove} />,
+    );
+    createWrapper(container)
+      .findButtonGroup()
+      ?.findButtonById("remove")
+      ?.click();
+    expect(onRemove).toHaveBeenCalledWith(mockItem.id);
+  });
 
-    expect(removeButton).not.toBeNull();
-    removeButton?.click();
-
-    const toggleUnitButton =
-      buttonButtonGroup?.findButtonById("toggleUnitType");
-    toggleUnitButton?.click();
-
-    expect(buttonButtonGroup?.getElement()).toBeInTheDocument();
+  test("list mode: increment calls onUpdate with qty + 1", () => {
+    const onUpdate = vi.fn();
+    const { container } = render(
+      <CardItemButtonGroup
+        {...baseProps}
+        isList={true}
+        onUpdate={onUpdate}
+        onRemove={vi.fn()}
+      />,
+    );
+    createWrapper(container)
+      .findButtonGroup()
+      ?.findButtonById("increment")
+      ?.click();
+    expect(onUpdate).toHaveBeenCalledWith(mockItem.id, { qty: 3 });
   });
 });

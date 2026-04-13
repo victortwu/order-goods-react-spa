@@ -10,6 +10,7 @@ import { ThemeProvider } from "./contexts/ThemeProvider/ThemeProvider.tsx";
 import { UserProvider } from "./contexts/UserContext/UserProvider.tsx";
 import "@aws-amplify/ui-react/styles.css";
 import "@cloudscape-design/global-styles/index.css";
+import "./theme.css";
 
 Amplify.configure(awsconfig);
 

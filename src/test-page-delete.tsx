@@ -1,42 +1,39 @@
 import { Button, SpaceBetween } from "@cloudscape-design/components";
 import { CardItems } from "./components/CardItems/CardItems";
 import { Product } from "./constants/types/product";
+import { createOrderItem } from "./utils/createOrderItem";
 
-const mockProductItems = [
+const mockProducts: Product[] = [
   {
-    upc: "abc123",
+    id: "a8960022-b23d-4d95-bfbe-10d8d74827bb",
+    name: "Chicken",
     category: "Food COGS",
     vendorID: "Restaurant Depot",
-    id: "a8960022-b23d-4d95-bfbe-10d8d74827bb",
-    hide: false,
-    name: "Chicken",
+    upc: "abc123",
     vendorProductName: "SOUR CREAM BULK JF",
-    qty: 1,
-    unitType: "case",
+    hide: false,
   },
   {
-    category: "Food COGS",
-    vendorID: "Restaurant Depot",
     id: "ec4e85fb-f38b-4561-96fb-9104f7af00dc",
     name: "Beef",
+    category: "Food COGS",
+    vendorID: "Restaurant Depot",
     upc: "76069522997",
     vendorProductName: "SOUR CREAM BULK JF",
     hide: false,
-    // qty: 2,
-    // unitType: "case",
   },
   {
-    category: "Food COGS",
-    vendorID: "Restaurant Depot",
     id: "259991a1-8007-48ae-89d7-fc160dcf6d36",
     name: "Lamb",
+    category: "Food COGS",
+    vendorID: "Restaurant Depot",
     upc: "72906299119",
     vendorProductName: "PDU ITALIAN PARSLE Y",
     hide: true,
-    // qty: 2,
-    // unitType: "case",
   },
-] as Product[];
+];
+
+const mockOrderItems = mockProducts.map(createOrderItem);
 
 export const TestPage = () => {
   return (
@@ -49,7 +46,7 @@ export const TestPage = () => {
         <Button iconName="calendar">Normal w Icon</Button>
       </SpaceBetween>
       <br />
-      <CardItems items={mockProductItems} isList={false} />
+      <CardItems items={mockOrderItems} isList={false} />
     </main>
   );
 };

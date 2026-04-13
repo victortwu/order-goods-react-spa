@@ -1,39 +1,65 @@
-import { useEffect } from "react";
-import { ListPayload } from "../../constants/types/list";
+import {
+  Alert,
+  Box,
+  Button,
+  Header,
+  SpaceBetween,
+} from "@cloudscape-design/components";
+import { CardItems } from "../../components/CardItems/CardItems";
+import { useOrderList } from "../../hooks/useOrderList";
 import { useCreateList } from "../../api/hooks/useCreateList";
 
 export const ListsContentPage = () => {
-  const { mutate } = useCreateList();
+  const { orderList, updateItem, removeItem, clearList } = useOrderList();
+  const { mutate, isPending, isError, reset } = useCreateList();
 
-  const testPayload: ListPayload = {
-    list: [
-      {
-        id: "aa6cad82-f32e-4a0f-9310-25e28923538f",
-        vendorProductName: "LAMB GROUND",
-        upc: "20713500000",
-        name: "TEST Ground Lamb",
-        vendorID: "Restaurant Depot",
-        category: "Food COGS",
-        qty: 5,
-        unitType: "unit",
-      },
-
-      {
-        id: "f7c81939-980f-4403-8765-dc39124a1de9",
-        vendorProductName: "CHX HAL THIGH CVP",
-        upc: "20795020000",
-        name: "TEST Chicken",
-        vendorID: "Restaurant Depot",
-        category: "Food COGS",
-        qty: 5,
-        unitType: "case",
-      },
-    ],
+  const handleSubmit = () => {
+    if (orderList.length === 0) return;
+    mutate({ list: orderList }, { onSuccess: clearList });
   };
 
-  //   useEffect(() => {
-  //     mutate(testPayload);
-  //   }, []);
+  return (
+    <SpaceBetween size="m">
+      {isError && (
+        <Alert
+          type="error"
+          dismissible
+          onDismiss={reset}
+          header="Order submission failed"
+        >
+          There was a problem submitting your order. Your list has been
+          preserved — please try again.
+        </Alert>
+      )}
 
-  return <main>Lists Content Page</main>;
+      <Header
+        variant="h1"
+        actions={
+          <Button
+            variant="primary"
+            loading={isPending}
+            disabled={orderList.length === 0}
+            onClick={handleSubmit}
+          >
+            Submit Order
+          </Button>
+        }
+      >
+        Order List
+      </Header>
+
+      {orderList.length === 0 ? (
+        <Box textAlign="center" color="text-body-secondary">
+          No items added yet. Go to Goods to build your order.
+        </Box>
+      ) : (
+        <CardItems
+          items={orderList}
+          isList={true}
+          onUpdate={updateItem}
+          onRemove={removeItem}
+        />
+      )}
+    </SpaceBetween>
+  );
 };

@@ -13,12 +13,17 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     setIsDark((prevIsDark: boolean) => {
       const newIsDark = !prevIsDark;
       localStorage.setItem("isDark", JSON.stringify(newIsDark));
+      // Update HTML class immediately for CSS variables
+      document.documentElement.className = newIsDark ? 'theme-dark' : 'theme-light';
       return newIsDark;
     });
   };
 
   useEffect(() => {
+    // Apply Cloudscape theme
     applyTheme({ theme: getTheme(isDark) });
+    // Ensure HTML class matches state
+    document.documentElement.className = isDark ? 'theme-dark' : 'theme-light';
   }, [isDark]);
 
   return (

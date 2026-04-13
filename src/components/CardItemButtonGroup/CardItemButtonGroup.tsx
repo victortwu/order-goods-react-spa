@@ -1,76 +1,50 @@
 import { ButtonGroup, ButtonGroupProps } from "@cloudscape-design/components";
-import { Product } from "../../constants/types/product";
-import { ListItem } from "../../constants/types/list";
+import { OrderItem, UnitType } from "../../constants/types/orderItem";
 
 type CardItemButtonGroupProps = {
-  item: Product | ListItem;
-  setNewItems: React.Dispatch<React.SetStateAction<Product[] | ListItem[]>>;
+  item: OrderItem;
   isList: boolean;
+  stagedQty: number;
+  stagedUnitType: UnitType;
+  onStageQty: (qty: number) => void;
+  onStageUnitType: (unitType: UnitType) => void;
+  onUpdate: (
+    id: string,
+    changes: Partial<Pick<OrderItem, "qty" | "unitType">>,
+  ) => void;
+  onRemove?: (id: string) => void;
 };
 
 export const CardItemButtonGroup = ({
   item,
-  setNewItems,
   isList,
+  stagedQty,
+  stagedUnitType,
+  onStageQty,
+  onStageUnitType,
+  onUpdate,
+  onRemove,
 }: CardItemButtonGroupProps) => {
-  const getCurrentIndexAndItem = (itemsCopy: Product[] | ListItem[]) => {
-    const currentItem = itemsCopy.find((prevItem) => item.id === prevItem.id);
-    return { idx: itemsCopy.indexOf(currentItem as ListItem), currentItem };
-  };
-
-  // TODO: instead of these logs, methods from create list context hook
   const handleClick = (detailId: string) => {
     switch (detailId) {
       case "increment":
-        setNewItems((prevItems) => {
-          const copyPrevItems: Product[] | ListItem[] = [...prevItems];
-          const { idx, currentItem } = getCurrentIndexAndItem(copyPrevItems);
-          copyPrevItems[idx] = {
-            ...currentItem,
-            qty: (currentItem?.qty ?? 0) + 1,
-            unitType: !currentItem?.unitType ? "case" : currentItem.unitType,
-          } as Product;
-          return copyPrevItems;
-        });
+        if (isList) onUpdate(item.id, { qty: item.qty + 1 });
+        else onStageQty(stagedQty + 1);
         break;
       case "decrement":
-        setNewItems((prevItems) => {
-          const copyPrevItems: Product[] | ListItem[] = [...prevItems];
-          const { idx, currentItem } = getCurrentIndexAndItem(copyPrevItems);
-
-          if ((currentItem?.qty as number) > 0) {
-            copyPrevItems[idx] = {
-              ...currentItem,
-              qty: (currentItem?.qty ?? 0) - 1,
-            } as Product;
-          }
-          return copyPrevItems;
-        });
+        if (isList) onUpdate(item.id, { qty: Math.max(0, item.qty - 1) });
+        else onStageQty(Math.max(0, stagedQty - 1));
         break;
       case "case":
-        setNewItems((prevItems) => {
-          const copyPrevItems: Product[] | ListItem[] = [...prevItems];
-          const { idx, currentItem } = getCurrentIndexAndItem(copyPrevItems);
-          copyPrevItems[idx] = {
-            ...currentItem,
-            unitType: "case",
-          } as Product;
-          return copyPrevItems;
-        });
+        if (isList) onUpdate(item.id, { unitType: "case" });
+        else onStageUnitType("case");
         break;
       case "unit":
-        setNewItems((prevItems) => {
-          const copyPrevItems: Product[] | ListItem[] = [...prevItems];
-          const { idx, currentItem } = getCurrentIndexAndItem(copyPrevItems);
-          copyPrevItems[idx] = {
-            ...currentItem,
-            unitType: "unit",
-          } as Product;
-          return copyPrevItems;
-        });
+        if (isList) onUpdate(item.id, { unitType: "unit" });
+        else onStageUnitType("unit");
         break;
       case "remove":
-        console.log("Remove from list");
+        onRemove?.(item.id);
         break;
       default:
         break;
@@ -79,10 +53,8 @@ export const CardItemButtonGroup = ({
 
   return (
     <ButtonGroup
-      onItemClick={({ detail }) => {
-        handleClick(detail.id);
-      }}
-      ariaLabel="Creating list actions"
+      onItemClick={({ detail }) => handleClick(detail.id)}
+      ariaLabel="Order item actions"
       items={[
         {
           type: "icon-button",
@@ -94,7 +66,7 @@ export const CardItemButtonGroup = ({
           type: "icon-button",
           id: "increment",
           iconName: "add-plus",
-          text: "Add",
+          text: "Increment",
         },
         {
           type: "menu-dropdown",
@@ -111,7 +83,7 @@ export const CardItemButtonGroup = ({
                 type: "icon-button",
                 id: "remove",
                 iconName: "remove",
-                text: "Remove",
+                text: "Remove from list",
               } as ButtonGroupProps.ItemOrGroup,
             ]
           : []),

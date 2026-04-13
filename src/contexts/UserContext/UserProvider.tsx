@@ -5,10 +5,10 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-import { fetchAuthSession } from "aws-amplify/auth";
+import { fetchAuthSession, type AuthSession } from "aws-amplify/auth";
 
 type UserContextType = {
-  user: any | null;
+  user: AuthSession | null;
   isAdmin: boolean;
   loading: boolean;
 };
@@ -20,7 +20,7 @@ export const UserContext = createContext<UserContextType>({
 });
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<AuthSession | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
