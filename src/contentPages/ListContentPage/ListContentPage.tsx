@@ -8,18 +8,40 @@ import {
 import { CardItems } from "../../components/CardItems/CardItems";
 import { useOrderList } from "../../hooks/useOrderList";
 import { useCreateList } from "../../api/hooks/useCreateList";
+import { useState } from "react";
 
 export const ListsContentPage = () => {
   const { orderList, updateItem, removeItem, clearList } = useOrderList();
   const { mutate, isPending, isError, reset } = useCreateList();
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleSubmit = () => {
     if (orderList.length === 0) return;
-    mutate({ list: orderList }, { onSuccess: clearList });
+    setShowSuccess(false);
+    mutate(
+      { list: orderList },
+      {
+        onSuccess: () => {
+          clearList();
+          setShowSuccess(true);
+        },
+      },
+    );
   };
 
   return (
     <SpaceBetween size="m">
+      {showSuccess && (
+        <Alert
+          type="success"
+          dismissible
+          onDismiss={() => setShowSuccess(false)}
+          header="Order submitted"
+        >
+          Your order has been submitted successfully.
+        </Alert>
+      )}
+
       {isError && (
         <Alert
           type="error"
@@ -48,7 +70,7 @@ export const ListsContentPage = () => {
         Order List
       </Header>
 
-      {orderList.length === 0 ? (
+      {orderList.length === 0 && !showSuccess ? (
         <Box textAlign="center" color="text-body-secondary">
           No items added yet. Go to Goods to build your order.
         </Box>
