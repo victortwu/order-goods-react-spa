@@ -1,5 +1,6 @@
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
+import { BrowserRouter } from "react-router";
 import { CustomSideNavigation } from "./CustomSideNavigation";
 import {
   APP_NAME,
@@ -9,12 +10,14 @@ import { SideNavigationProps } from "@cloudscape-design/components";
 
 describe("<CustomSideNavigation />", () => {
   it("renders with default items", () => {
-    const { getByText } = render(<CustomSideNavigation />);
+    const { getByText } = render(
+      <BrowserRouter>
+        <CustomSideNavigation />
+      </BrowserRouter>,
+    );
 
-    // Check if the header text is rendered
     expect(getByText(APP_NAME)).toBeInTheDocument();
 
-    // Check if the default items are rendered
     DEFAULT_SIDE_NAV_ITEMS.forEach((item) => {
       expect(getByText(item.text)).toBeInTheDocument();
     });
@@ -26,9 +29,12 @@ describe("<CustomSideNavigation />", () => {
       { type: "link", text: "Custom Item 2", href: "/custom2" },
     ];
 
-    const { getByText } = render(<CustomSideNavigation items={customItems} />);
+    const { getByText } = render(
+      <BrowserRouter>
+        <CustomSideNavigation items={customItems} />
+      </BrowserRouter>,
+    );
 
-    // Check if the custom items are rendered
     customItems.forEach((item) => {
       expect(getByText(item.text)).toBeInTheDocument();
     });

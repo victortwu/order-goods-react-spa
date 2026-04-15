@@ -57,6 +57,15 @@ export const CardItemButtonGroup = ({
       ariaLabel="Order item actions"
       items={[
         {
+          type: "menu-dropdown",
+          id: "selectUnit",
+          text: "Select unit type",
+          items: [
+            { itemType: "action", text: "Case", id: "case" },
+            { itemType: "action", text: "Unit", id: "unit" },
+          ],
+        },
+        {
           type: "icon-button",
           id: "decrement",
           iconName: "subtract-minus",
@@ -67,15 +76,6 @@ export const CardItemButtonGroup = ({
           id: "increment",
           iconName: "add-plus",
           text: "Increment",
-        },
-        {
-          type: "menu-dropdown",
-          id: "selectUnit",
-          text: "Select unit type",
-          items: [
-            { itemType: "action", text: "Case", id: "case" },
-            { itemType: "action", text: "Unit", id: "unit" },
-          ],
         },
         ...(isList
           ? [

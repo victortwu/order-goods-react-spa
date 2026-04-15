@@ -4,6 +4,7 @@ import {
 } from "@cloudscape-design/components";
 import { APP_NAME } from "../../constants/globalConstants";
 import { useDarkMode } from "../../contexts/ThemeProvider/ThemeContext";
+import { useNavigate } from "react-router";
 
 interface CustomTopNavigationProps {
   signOut: ((data?: any | undefined) => void) | undefined;
@@ -15,9 +16,17 @@ export const CustomTopNavigation = ({
   identity = { href: "/", title: APP_NAME },
 }: CustomTopNavigationProps) => {
   const { isDark, toggleTheme } = useDarkMode();
+  const navigate = useNavigate();
+
   return (
     <TopNavigation
-      identity={identity}
+      identity={{
+        ...identity,
+        onFollow: (event) => {
+          event.preventDefault();
+          navigate(identity.href ?? "/");
+        },
+      }}
       utilities={[
         {
           type: "button",
@@ -32,13 +41,17 @@ export const CustomTopNavigation = ({
               signOut();
             }
           },
+          onItemFollow: (event) => {
+            event.preventDefault();
+            if (event.detail.href) navigate(event.detail.href);
+          },
           items: [
             {
               id: "link-group",
               text: "Go To",
               items: [
                 {
-                  id: "homeLind",
+                  id: "homeLink",
                   text: "Home",
                   href: "/",
                 },
