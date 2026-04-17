@@ -37,7 +37,7 @@ export const getTheme = (isDark: boolean): Theme => {
       colorTextLinkDefault: c.textLink,
       colorTextLinkHover: c.textLinkHover,
       colorTextButtonNormalDefault: c.textPrimary,
-      colorTextButtonPrimaryDefault: c.textPrimary,
+      colorTextButtonPrimaryDefault: c.textButtonPrimary,
       colorTextInteractiveDefault: c.textInteractive,
       colorTextInteractiveHover: c.textInteractiveHover,
       colorTextGroupLabel: c.textSubheading,
