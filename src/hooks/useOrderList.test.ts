@@ -12,7 +12,7 @@ const makeItem = (id: string, qty = 1): OrderItem => ({
     id,
     name: `Product ${id}`,
     category: "Cat",
-    vendorID: "Vendor",
+    vendorID: "RESTAURANT_DEPOT",
   },
 });
 

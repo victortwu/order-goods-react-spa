@@ -6,7 +6,7 @@ const mockProduct: Product = {
   id: "abc-123",
   name: "Ground Lamb",
   category: "Food COGS",
-  vendorID: "Restaurant Depot",
+  vendorID: "RESTAURANT_DEPOT",
   upc: "20713500000",
   vendorProductName: "LAMB GROUND",
   hide: false,
@@ -38,7 +38,7 @@ describe("createOrderItem", () => {
       id: "min-1",
       name: "Minimal",
       category: "Cat",
-      vendorID: "Vendor",
+      vendorID: "RESTAURANT_DEPOT",
     };
     const item = createOrderItem(minimal);
     expect(item.id).toBe("min-1");

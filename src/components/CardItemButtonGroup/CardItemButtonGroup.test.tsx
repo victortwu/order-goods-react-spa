@@ -13,7 +13,7 @@ const mockItem: OrderItem = {
     id: "test-id-123",
     name: "Test Product",
     category: "Test Category",
-    vendorID: "Test Vendor",
+    vendorID: "RESTAURANT_DEPOT",
   },
 };
 

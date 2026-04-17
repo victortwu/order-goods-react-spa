@@ -26,11 +26,11 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+
+    /* Vitest Types */
+    "types": ["vitest/globals"]
   },
   
-  /* Vitest Types */
-  "types": ["vitest/globals"],
-  
-  "include": ["src", "vite.config.ts", "**/*.test.ts", "**/*.test.tsx"]
+  "include": ["src"]
 }

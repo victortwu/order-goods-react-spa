@@ -19,7 +19,9 @@ describe("<CustomSideNavigation />", () => {
     expect(getByText(APP_NAME)).toBeInTheDocument();
 
     DEFAULT_SIDE_NAV_ITEMS.forEach((item) => {
-      expect(getByText(item.text)).toBeInTheDocument();
+      if ("text" in item) {
+        expect(getByText(item.text)).toBeInTheDocument();
+      }
     });
   });
 
@@ -36,7 +38,9 @@ describe("<CustomSideNavigation />", () => {
     );
 
     customItems.forEach((item) => {
-      expect(getByText(item.text)).toBeInTheDocument();
+      if ("text" in item) {
+        expect(getByText(item.text)).toBeInTheDocument();
+      }
     });
   });
 });

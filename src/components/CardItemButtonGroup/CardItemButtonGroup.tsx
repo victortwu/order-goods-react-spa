@@ -19,7 +19,7 @@ export const CardItemButtonGroup = ({
   item,
   isList,
   stagedQty,
-  stagedUnitType,
+  stagedUnitType: _stagedUnitType,
   onStageQty,
   onStageUnitType,
   onUpdate,
