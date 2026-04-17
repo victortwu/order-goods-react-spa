@@ -1,0 +1,132 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: "Stage to deploy"
+        required: true
+        type: choice
+        options:
+          - Beta
+          - Prod
+
+env:
+  AWS_REGION: us-west-2
+  NODE_VERSION: "18"
+
+jobs:
+  # ──────────────────────────────────────────────
+  # Beta — auto-deploys on every push to main
+  # ──────────────────────────────────────────────
+  deploy-beta:
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.stage == 'Beta')
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    environment: beta
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Create .env.beta
+        run: |
+          cat > .env.beta <<EOF
+          VITE_BASE_URL=${{ vars.VITE_BASE_URL }}
+          VITE_USERPOOL_ID=${{ vars.VITE_USERPOOL_ID }}
+          VITE_USERPOOL_CLIENT_ID=${{ vars.VITE_USERPOOL_CLIENT_ID }}
+          VITE_IDENTITYPOOL_ID=${{ vars.VITE_IDENTITYPOOL_ID }}
+          EOF
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build -- --mode beta
+
+      - name: Run tests
+        run: npm run test:run
+
+      # ── AWS Auth: Choose ONE option ──
+
+      # OPTION A: OIDC (recommended)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # OPTION B: Static keys (uncomment below, comment out OIDC above)
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy to S3
+        run: aws s3 sync dist/ s3://${{ vars.S3_BUCKET_NAME }} --delete
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
+
+  # ──────────────────────────────────────────────
+  # Prod — manual trigger only
+  # ──────────────────────────────────────────────
+  deploy-prod:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.stage == 'Prod'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Create .env.production
+        run: |
+          cat > .env.production <<EOF
+          VITE_BASE_URL=${{ vars.VITE_BASE_URL }}
+          VITE_USERPOOL_ID=${{ vars.VITE_USERPOOL_ID }}
+          VITE_USERPOOL_CLIENT_ID=${{ vars.VITE_USERPOOL_CLIENT_ID }}
+          VITE_IDENTITYPOOL_ID=${{ vars.VITE_IDENTITYPOOL_ID }}
+          EOF
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build -- --mode production
+
+      - name: Run tests
+        run: npm run test:run
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy to S3
+        run: aws s3 sync dist/ s3://${{ vars.S3_BUCKET_NAME }} --delete
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
