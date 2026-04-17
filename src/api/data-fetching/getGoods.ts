@@ -1,4 +1,5 @@
 import { get } from "aws-amplify/api";
+import { fetchAuthSession } from "aws-amplify/auth";
 import { Product } from "../../constants/types/product";
 import { API_PATHS } from "../../constants/types/apiPaths";
 import { API_NAME } from "../../constants/globalConstants";
@@ -7,9 +8,17 @@ import { API_NAME } from "../../constants/globalConstants";
 // to test connection for now
 export const getGoods = async (): Promise<Product[] | undefined> => {
   try {
+    const session = await fetchAuthSession();
+    const token = session.tokens?.idToken?.toString();
+
     const res = get({
       path: API_PATHS.GOODS,
       apiName: API_NAME,
+      options: {
+        headers: {
+          Authorization: token ?? "",
+        },
+      },
     });
     const data = await (await res.response).body.json();
     return data as unknown as Product[];
