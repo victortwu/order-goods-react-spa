@@ -81,10 +81,11 @@ jobs:
             --paths "/*"
 
   # ──────────────────────────────────────────────
-  # Prod — manual trigger only
+  # Prod — auto-deploys after Beta, or manual trigger
   # ──────────────────────────────────────────────
   deploy-prod:
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.stage == 'Prod'
+    needs: deploy-beta
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.stage == 'Prod')
     runs-on: ubuntu-latest
     permissions:
       id-token: write
