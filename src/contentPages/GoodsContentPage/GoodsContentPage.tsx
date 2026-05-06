@@ -1,6 +1,7 @@
 import { Spinner, TextFilter } from "@cloudscape-design/components";
 import { useGetGoods } from "../../api/hooks/useGetGoods";
-import { CardItems } from "../../components/CardItems/CardItems";
+import { GoodsCards } from "../../components/GoodsCards/GoodsCards";
+import { OrderListPopover } from "../../components/OrderListPopover/OrderListPopover";
 import { useOrderList } from "../../hooks/useOrderList";
 import { createOrderItem } from "../../utils/createOrderItem";
 import { useState } from "react";
@@ -24,11 +25,11 @@ export const GoodsContentPage = () => {
     : orderItems;
 
   return (
-    <CardItems
+    <GoodsCards
       items={filteredItems}
-      isList={false}
-      onAdd={addItem}
       listIds={listIds}
+      onAdd={addItem}
+      headerActions={<OrderListPopover />}
       filter={
         <TextFilter
           filteringText={filterText}

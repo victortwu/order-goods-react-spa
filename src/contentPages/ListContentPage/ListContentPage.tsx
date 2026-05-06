@@ -3,17 +3,19 @@ import {
   Box,
   Button,
   Header,
+  Modal,
   SpaceBetween,
 } from "@cloudscape-design/components";
-import { CardItems } from "../../components/CardItems/CardItems";
+import { OrderListView } from "../../components/OrderListView/OrderListView";
 import { useOrderList } from "../../hooks/useOrderList";
 import { useCreateList } from "../../api/hooks/useCreateList";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 export const ListsContentPage = () => {
   const { orderList, updateItem, removeItem, clearList } = useOrderList();
   const { mutate, isPending, isError, reset } = useCreateList();
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showClearModal, setShowClearModal] = useState(false);
 
   const handleSubmit = () => {
     if (orderList.length === 0) return;
@@ -28,6 +30,17 @@ export const ListsContentPage = () => {
       },
     );
   };
+
+  const handleClearAll = () => {
+    clearList();
+    setShowClearModal(false);
+  };
+
+  const calculateTotalUnits = useCallback(() => {
+    return orderList.reduce((acc, curr) => {
+      return curr.qty + acc;
+    }, 0);
+  }, [orderList]);
 
   return (
     <SpaceBetween size="m">
@@ -56,7 +69,33 @@ export const ListsContentPage = () => {
 
       <Header
         variant="h1"
-        actions={
+        counter={
+          orderList.length > 0 &&
+          `| ${calculateTotalUnits()} pkg${calculateTotalUnits() > 1 ? "s" : ""}`
+        }
+      >
+        Item List
+      </Header>
+
+      {orderList.length === 0 && !showSuccess ? (
+        <Box textAlign="center" color="text-body-secondary">
+          No items added yet. Go to Goods to build your order.
+        </Box>
+      ) : (
+        <OrderListView
+          items={orderList}
+          onUpdate={updateItem}
+          onRemove={removeItem}
+        />
+      )}
+      <Box float="right">
+        <SpaceBetween direction="horizontal" size="s">
+          <Button
+            disabled={orderList.length === 0}
+            onClick={() => setShowClearModal(true)}
+          >
+            Clear All
+          </Button>
           <Button
             variant="primary"
             loading={isPending}
@@ -65,23 +104,26 @@ export const ListsContentPage = () => {
           >
             Submit Order
           </Button>
+        </SpaceBetween>
+      </Box>
+      <Modal
+        visible={showClearModal}
+        onDismiss={() => setShowClearModal(false)}
+        header="Clear all items"
+        footer={
+          <Box float="right">
+            <SpaceBetween direction="horizontal" size="xs">
+              <Button onClick={() => setShowClearModal(false)}>Cancel</Button>
+              <Button variant="primary" onClick={handleClearAll}>
+                Clear All
+              </Button>
+            </SpaceBetween>
+          </Box>
         }
       >
-        Order List
-      </Header>
-
-      {orderList.length === 0 && !showSuccess ? (
-        <Box textAlign="center" color="text-body-secondary">
-          No items added yet. Go to Goods to build your order.
-        </Box>
-      ) : (
-        <CardItems
-          items={orderList}
-          isList={true}
-          onUpdate={updateItem}
-          onRemove={removeItem}
-        />
-      )}
+        Are you sure you want to clear all items from your order list? This
+        action cannot be undone.
+      </Modal>
     </SpaceBetween>
   );
 };

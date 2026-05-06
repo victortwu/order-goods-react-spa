@@ -1,46 +1,49 @@
 import { render } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { BrowserRouter } from "react-router";
 import { CustomSideNavigation } from "./CustomSideNavigation";
-import {
-  APP_NAME,
-  DEFAULT_SIDE_NAV_ITEMS,
-} from "../../constants/globalConstants";
-import { SideNavigationProps } from "@cloudscape-design/components";
+import { APP_NAME } from "../../constants/globalConstants";
+
+// --- Mock ---
+
+const mockUseUser = vi.fn();
+vi.mock("../../contexts/UserContext/UserProvider", () => ({
+  useUser: () => mockUseUser(),
+}));
+
+// --- Tests ---
 
 describe("<CustomSideNavigation />", () => {
-  it("renders with default items", () => {
+  it("renders default nav items for non-admin users", () => {
+    // arrange
+    mockUseUser.mockReturnValue({ isAdmin: false, loading: false, user: null });
+
+    // act
+    const { getByText, queryByText } = render(
+      <BrowserRouter>
+        <CustomSideNavigation />
+      </BrowserRouter>,
+    );
+
+    // assert
+    expect(getByText(APP_NAME)).toBeInTheDocument();
+    expect(getByText("Goods")).toBeInTheDocument();
+    expect(getByText("List")).toBeInTheDocument();
+    expect(queryByText("Admin")).not.toBeInTheDocument();
+  });
+
+  it("renders Admin link for admin users", () => {
+    // arrange
+    mockUseUser.mockReturnValue({ isAdmin: true, loading: false, user: null });
+
+    // act
     const { getByText } = render(
       <BrowserRouter>
         <CustomSideNavigation />
       </BrowserRouter>,
     );
 
-    expect(getByText(APP_NAME)).toBeInTheDocument();
-
-    DEFAULT_SIDE_NAV_ITEMS.forEach((item) => {
-      if ("text" in item) {
-        expect(getByText(item.text)).toBeInTheDocument();
-      }
-    });
-  });
-
-  it("renders with custom items", () => {
-    const customItems: SideNavigationProps.Item[] = [
-      { type: "link", text: "Custom Item 1", href: "/custom1" },
-      { type: "link", text: "Custom Item 2", href: "/custom2" },
-    ];
-
-    const { getByText } = render(
-      <BrowserRouter>
-        <CustomSideNavigation items={customItems} />
-      </BrowserRouter>,
-    );
-
-    customItems.forEach((item) => {
-      if ("text" in item) {
-        expect(getByText(item.text)).toBeInTheDocument();
-      }
-    });
+    // assert
+    expect(getByText("Admin")).toBeInTheDocument();
   });
 });

@@ -3,9 +3,11 @@ import {
   useContext,
   useState,
   useEffect,
+  useCallback,
   ReactNode,
 } from "react";
 import { fetchAuthSession, type AuthSession } from "aws-amplify/auth";
+import { Hub } from "aws-amplify/utils";
 
 type UserContextType = {
   user: AuthSession | null;
@@ -24,27 +26,34 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const session = await fetchAuthSession();
-        const groups =
-          (session?.tokens?.idToken?.payload?.["cognito:groups"] as string[]) ||
-          [];
+  const loadUser = useCallback(async () => {
+    try {
+      const session = await fetchAuthSession();
+      const groups =
+        (session?.tokens?.idToken?.payload?.["cognito:groups"] as string[]) ||
+        [];
 
-        setUser(session);
-        setIsAdmin(groups.includes("admins"));
-      } catch (error) {
-        console.error("Error fetching user session:", error);
-        setUser(null);
-        setIsAdmin(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadUser();
+      setUser(session);
+      setIsAdmin(groups.includes("admins"));
+    } catch {
+      setUser(null);
+      setIsAdmin(false);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadUser();
+
+    const unsubscribe = Hub.listen("auth", ({ payload }) => {
+      if (payload.event === "signedIn" || payload.event === "signedOut") {
+        loadUser();
+      }
+    });
+
+    return unsubscribe;
+  }, [loadUser]);
 
   return (
     <UserContext.Provider value={{ user, isAdmin, loading }}>

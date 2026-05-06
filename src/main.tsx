@@ -8,6 +8,7 @@ import { App } from "./App.tsx";
 import { ErrorBoundary } from "./ErrorBoundry.tsx";
 import { ThemeProvider } from "./contexts/ThemeProvider/ThemeProvider.tsx";
 import { UserProvider } from "./contexts/UserContext/UserProvider.tsx";
+import { OrderListProvider } from "./contexts/OrderListContext/OrderListContext.tsx";
 import "@aws-amplify/ui-react/styles.css";
 import "@cloudscape-design/global-styles/index.css";
 import "./theme.css";
@@ -23,7 +24,9 @@ createRoot(document.getElementById("root")!).render(
         <ThemeProvider>
           <UserProvider>
             <BrowserRouter>
-              <App />
+              <OrderListProvider>
+                <App />
+              </OrderListProvider>
             </BrowserRouter>
           </UserProvider>
         </ThemeProvider>

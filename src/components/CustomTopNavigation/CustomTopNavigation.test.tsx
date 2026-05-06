@@ -3,16 +3,21 @@ import createWrapper from "@cloudscape-design/components/test-utils/dom";
 import { BrowserRouter } from "react-router";
 import { CustomTopNavigation } from "./CustomTopNavigation";
 import { describe, it, expect, vi } from "vitest";
+import { OrderListProvider } from "../../contexts/OrderListContext/OrderListContext";
 
 const testIdentity = { href: "", title: "Test Title" };
 const mockSignOut = vi.fn();
 
-const renderWithRouter = (ui: React.ReactElement) =>
-  render(<BrowserRouter>{ui}</BrowserRouter>);
+const renderWithProviders = (ui: React.ReactElement) =>
+  render(
+    <BrowserRouter>
+      <OrderListProvider>{ui}</OrderListProvider>
+    </BrowserRouter>,
+  );
 
 describe("<CustomTopNavigation />", () => {
   it("renders the title", () => {
-    const { container } = renderWithRouter(
+    const { container } = renderWithProviders(
       <CustomTopNavigation identity={testIdentity} signOut={mockSignOut} />,
     );
     const wrapper = createWrapper(container);
@@ -22,7 +27,7 @@ describe("<CustomTopNavigation />", () => {
   });
 
   it("renders the dropdown button", () => {
-    const { container } = renderWithRouter(
+    const { container } = renderWithProviders(
       <CustomTopNavigation identity={testIdentity} signOut={mockSignOut} />,
     );
 
@@ -34,7 +39,7 @@ describe("<CustomTopNavigation />", () => {
   });
 
   it("opens the dropdown menu when button is clicked", () => {
-    const { container } = renderWithRouter(
+    const { container } = renderWithProviders(
       <CustomTopNavigation identity={testIdentity} signOut={mockSignOut} />,
     );
 
