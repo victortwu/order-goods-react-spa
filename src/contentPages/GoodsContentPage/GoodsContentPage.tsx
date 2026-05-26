@@ -14,14 +14,10 @@ export const GoodsContentPage = () => {
   if (isLoading) return <Spinner size="large" />;
 
   const orderItems = (data ?? []).map(createOrderItem);
-  const listIds = new Set(
-    orderItems.filter((i) => isInList(i.id)).map((i) => i.id),
-  );
+  const listIds = new Set(orderItems.filter((i) => isInList(i.id)).map((i) => i.id));
 
   const filteredItems = filterText
-    ? orderItems.filter((item) =>
-        item.productName.toLowerCase().includes(filterText.toLowerCase()),
-      )
+    ? orderItems.filter((item) => item.productName.toLowerCase().includes(filterText.toLowerCase()))
     : orderItems;
 
   return (

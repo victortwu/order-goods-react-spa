@@ -119,11 +119,7 @@ describe("<GoodsContentPage />", () => {
     const user = userEvent.setup();
     const { container } = render(<GoodsContentPage />);
     const wrapper = createWrapper(container);
-    const filterInput = wrapper
-      .findTextFilter()!
-      .findInput()!
-      .findNativeInput()!
-      .getElement();
+    const filterInput = wrapper.findTextFilter()!.findInput()!.findNativeInput()!.getElement();
 
     // act
     await user.type(filterInput, "chick");
@@ -143,11 +139,7 @@ describe("<GoodsContentPage />", () => {
     const user = userEvent.setup();
     const { container } = render(<GoodsContentPage />);
     const wrapper = createWrapper(container);
-    const filterInput = wrapper
-      .findTextFilter()!
-      .findInput()!
-      .findNativeInput()!
-      .getElement();
+    const filterInput = wrapper.findTextFilter()!.findInput()!.findNativeInput()!.getElement();
 
     // act
     await user.type(filterInput, "MAYO");
@@ -181,11 +173,7 @@ describe("<GoodsContentPage />", () => {
     const user = userEvent.setup();
     const { container } = render(<GoodsContentPage />);
     const wrapper = createWrapper(container);
-    const filterInput = wrapper
-      .findTextFilter()!
-      .findInput()!
-      .findNativeInput()!
-      .getElement();
+    const filterInput = wrapper.findTextFilter()!.findInput()!.findNativeInput()!.getElement();
 
     // act — type to filter, then clear
     await user.type(filterInput, "chick");

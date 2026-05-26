@@ -7,9 +7,7 @@ vi.mock("@aws-amplify/ui-react", async () => {
   return {
     ...actual,
     Authenticator: ({ children }: object | any) =>
-      typeof children === "function"
-        ? children({ signOut: vi.fn(), user: {} })
-        : children,
+      typeof children === "function" ? children({ signOut: vi.fn(), user: {} }) : children,
   };
 });
 

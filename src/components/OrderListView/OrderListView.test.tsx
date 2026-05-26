@@ -34,9 +34,7 @@ describe("<OrderListView />", () => {
     const items = [makeItem("a", 2), makeItem("b", 5, "unit")];
 
     // act
-    render(
-      <OrderListView items={items} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />,
-    );
+    render(<OrderListView items={items} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />);
 
     // assert
     expect(screen.getByText(/Product a/)).toBeInTheDocument();
@@ -50,9 +48,7 @@ describe("<OrderListView />", () => {
     const items = [makeItem("a"), makeItem("b")];
 
     // act
-    render(
-      <OrderListView items={items} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />,
-    );
+    render(<OrderListView items={items} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />);
 
     // assert
     expect(screen.getByLabelText("Edit Product a")).toBeInTheDocument();
@@ -65,9 +61,7 @@ describe("<OrderListView />", () => {
     const user = userEvent.setup();
 
     // act
-    render(
-      <OrderListView items={items} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />,
-    );
+    render(<OrderListView items={items} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />);
     await user.click(screen.getByLabelText("Edit Product a"));
 
     // assert
@@ -81,9 +75,7 @@ describe("<OrderListView />", () => {
     const user = userEvent.setup();
 
     // act
-    render(
-      <OrderListView items={items} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />,
-    );
+    render(<OrderListView items={items} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />);
     await user.click(screen.getByLabelText("Edit Product a"));
     await user.click(screen.getByText("Done"));
 
@@ -97,9 +89,7 @@ describe("<OrderListView />", () => {
     const user = userEvent.setup();
 
     // act
-    render(
-      <OrderListView items={items} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />,
-    );
+    render(<OrderListView items={items} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />);
     await user.click(screen.getByLabelText("Edit Product a"));
     // ButtonGroup icon buttons are accessed by their aria-label text
     const removeButton = screen.getByRole("button", { name: "Remove from list" });

@@ -7,11 +7,7 @@ interface ListButtonGroupProps {
   onRemove: (id: string) => void;
 }
 
-export const ListButtonGroup = ({
-  item,
-  onUpdate,
-  onRemove,
-}: ListButtonGroupProps) => (
+export const ListButtonGroup = ({ item, onUpdate, onRemove }: ListButtonGroupProps) => (
   <ButtonGroup
     onItemClick={({ detail }) => {
       switch (detail.id) {

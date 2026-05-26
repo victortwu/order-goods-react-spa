@@ -14,7 +14,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       const newIsDark = !prevIsDark;
       localStorage.setItem("isDark", JSON.stringify(newIsDark));
       // Update HTML class immediately for CSS variables
-      document.documentElement.className = newIsDark ? 'theme-dark' : 'theme-light';
+      document.documentElement.className = newIsDark ? "theme-dark" : "theme-light";
       return newIsDark;
     });
   };
@@ -23,12 +23,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     // Apply Cloudscape theme
     applyTheme({ theme: getTheme(isDark) });
     // Ensure HTML class matches state
-    document.documentElement.className = isDark ? 'theme-dark' : 'theme-light';
+    document.documentElement.className = isDark ? "theme-dark" : "theme-light";
   }, [isDark]);
 
-  return (
-    <ThemeContext.Provider value={{ toggleTheme, isDark }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={{ toggleTheme, isDark }}>{children}</ThemeContext.Provider>;
 };

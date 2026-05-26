@@ -1,11 +1,4 @@
-import {
-  Alert,
-  Box,
-  Button,
-  Header,
-  Modal,
-  SpaceBetween,
-} from "@cloudscape-design/components";
+import { Alert, Box, Button, Header, Modal, SpaceBetween } from "@cloudscape-design/components";
 import { OrderListView } from "../../components/OrderListView/OrderListView";
 import { useOrderList } from "../../hooks/useOrderList";
 import { useCreateList } from "../../api/hooks/useCreateList";
@@ -56,14 +49,9 @@ export const ListsContentPage = () => {
       )}
 
       {isError && (
-        <Alert
-          type="error"
-          dismissible
-          onDismiss={reset}
-          header="Order submission failed"
-        >
-          There was a problem submitting your order. Your list has been
-          preserved — please try again.
+        <Alert type="error" dismissible onDismiss={reset} header="Order submission failed">
+          There was a problem submitting your order. Your list has been preserved — please try
+          again.
         </Alert>
       )}
 
@@ -82,18 +70,11 @@ export const ListsContentPage = () => {
           No items added yet. Go to Goods to build your order.
         </Box>
       ) : (
-        <OrderListView
-          items={orderList}
-          onUpdate={updateItem}
-          onRemove={removeItem}
-        />
+        <OrderListView items={orderList} onUpdate={updateItem} onRemove={removeItem} />
       )}
       <Box float="right">
         <SpaceBetween direction="horizontal" size="s">
-          <Button
-            disabled={orderList.length === 0}
-            onClick={() => setShowClearModal(true)}
-          >
+          <Button disabled={orderList.length === 0} onClick={() => setShowClearModal(true)}>
             Clear All
           </Button>
           <Button
@@ -121,8 +102,7 @@ export const ListsContentPage = () => {
           </Box>
         }
       >
-        Are you sure you want to clear all items from your order list? This
-        action cannot be undone.
+        Are you sure you want to clear all items from your order list? This action cannot be undone.
       </Modal>
     </SpaceBetween>
   );

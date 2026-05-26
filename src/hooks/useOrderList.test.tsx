@@ -58,9 +58,7 @@ describe("useOrderList", () => {
     act(() => result.current.addItem(makeItem("x", 1)));
     act(() => result.current.updateItem("x", { qty: 5 }));
     expect(result.current.orderList[0].qty).toBe(5);
-    const stored = JSON.parse(
-      localStorage.getItem("orderList")!,
-    ) as OrderItem[];
+    const stored = JSON.parse(localStorage.getItem("orderList")!) as OrderItem[];
     expect(stored[0].qty).toBe(5);
   });
 
@@ -86,9 +84,7 @@ describe("useOrderList", () => {
     act(() => result.current.removeItem("a"));
     expect(result.current.orderList).toHaveLength(1);
     expect(result.current.orderList[0].id).toBe("b");
-    const stored = JSON.parse(
-      localStorage.getItem("orderList")!,
-    ) as OrderItem[];
+    const stored = JSON.parse(localStorage.getItem("orderList")!) as OrderItem[];
     expect(stored).toHaveLength(1);
   });
 

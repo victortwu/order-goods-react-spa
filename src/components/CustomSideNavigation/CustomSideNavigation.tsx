@@ -1,7 +1,4 @@
-import {
-  SideNavigation,
-  SideNavigationProps,
-} from "@cloudscape-design/components";
+import { SideNavigation, SideNavigationProps } from "@cloudscape-design/components";
 import { APP_NAME, DEFAULT_SIDE_NAV_ITEMS } from "../../constants/globalConstants";
 import { useNavigate, useLocation } from "react-router";
 import { useUser } from "../../contexts/UserContext/UserProvider";
@@ -13,9 +10,7 @@ export const CustomSideNavigation = () => {
 
   const items: SideNavigationProps.Item[] = [
     ...DEFAULT_SIDE_NAV_ITEMS,
-    ...(isAdmin
-      ? [{ type: "link" as const, text: "Admin", href: "/admin" }]
-      : []),
+    ...(isAdmin ? [{ type: "link" as const, text: "Admin", href: "/admin" }] : []),
   ];
 
   return (

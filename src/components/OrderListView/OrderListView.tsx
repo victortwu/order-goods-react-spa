@@ -1,28 +1,15 @@
 import { useCallback, useState } from "react";
-import {
-  Box,
-  Button,
-  Modal,
-  List,
-  SpaceBetween,
-} from "@cloudscape-design/components";
+import { Box, Button, Modal, List, SpaceBetween } from "@cloudscape-design/components";
 import { OrderItem } from "../../constants/types/orderItem";
 import { ListButtonGroup } from "../ListButtonGroup/ListButtonGroup";
 
 interface OrderListViewProps {
   items: OrderItem[];
-  onUpdate: (
-    id: string,
-    changes: Partial<Pick<OrderItem, "qty" | "unitType">>,
-  ) => void;
+  onUpdate: (id: string, changes: Partial<Pick<OrderItem, "qty" | "unitType">>) => void;
   onRemove: (id: string) => void;
 }
 
-export const OrderListView = ({
-  items,
-  onUpdate,
-  onRemove,
-}: OrderListViewProps) => {
+export const OrderListView = ({ items, onUpdate, onRemove }: OrderListViewProps) => {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const editingItem = editingId ? items.find((i) => i.id === editingId) : null;
@@ -74,11 +61,7 @@ export const OrderListView = ({
           }
         >
           <SpaceBetween size={"s"}>
-            <ListButtonGroup
-              item={editingItem}
-              onUpdate={onUpdate}
-              onRemove={handleRemove}
-            />
+            <ListButtonGroup item={editingItem} onUpdate={onUpdate} onRemove={handleRemove} />
             {`${editingItem.productName} | ${qtyLabel}`}
           </SpaceBetween>
         </Modal>

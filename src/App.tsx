@@ -7,11 +7,7 @@ import { CustomSideNavigation } from "./components/CustomSideNavigation/CustomSi
 import { PageContentRoutes } from "./routes/pageContentRoutes/PageContentRoutes";
 
 export const App = () => (
-  <Authenticator
-    variation="modal"
-    formFields={formOverrides}
-    components={{ Header: SignInHeader }}
-  >
+  <Authenticator variation="modal" formFields={formOverrides} components={{ Header: SignInHeader }}>
     {({ signOut }) => {
       return (
         <>

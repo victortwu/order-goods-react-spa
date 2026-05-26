@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  ReactNode,
-} from "react";
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { fetchAuthSession, type AuthSession } from "aws-amplify/auth";
 import { Hub } from "aws-amplify/utils";
 
@@ -29,9 +22,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const loadUser = useCallback(async () => {
     try {
       const session = await fetchAuthSession();
-      const groups =
-        (session?.tokens?.idToken?.payload?.["cognito:groups"] as string[]) ||
-        [];
+      const groups = (session?.tokens?.idToken?.payload?.["cognito:groups"] as string[]) || [];
 
       setUser(session);
       setIsAdmin(groups.includes("admins"));
@@ -55,11 +46,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     return unsubscribe;
   }, [loadUser]);
 
-  return (
-    <UserContext.Provider value={{ user, isAdmin, loading }}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={{ user, isAdmin, loading }}>{children}</UserContext.Provider>;
 };
 
 export const useUser = () => useContext(UserContext);

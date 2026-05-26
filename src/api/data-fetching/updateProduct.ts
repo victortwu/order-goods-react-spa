@@ -4,8 +4,7 @@ import { Product } from "../../constants/types/product";
 import { API_PATHS } from "../../constants/types/apiPaths";
 import { API_NAME } from "../../constants/globalConstants";
 
-export type UpdateProductPayload = Pick<Product, "id"> &
-  Partial<Omit<Product, "id">>;
+export type UpdateProductPayload = Pick<Product, "id"> & Partial<Omit<Product, "id">>;
 
 export const updateProduct = async (payload: UpdateProductPayload) => {
   const session = await fetchAuthSession();

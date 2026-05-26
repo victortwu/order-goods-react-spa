@@ -7,11 +7,7 @@ interface GoodsButtonGroupProps {
   onUnitTypeChange: (unitType: UnitType) => void;
 }
 
-export const GoodsButtonGroup = ({
-  qty,
-  onQtyChange,
-  onUnitTypeChange,
-}: GoodsButtonGroupProps) => (
+export const GoodsButtonGroup = ({ qty, onQtyChange, onUnitTypeChange }: GoodsButtonGroupProps) => (
   <ButtonGroup
     onItemClick={({ detail }) => {
       switch (detail.id) {

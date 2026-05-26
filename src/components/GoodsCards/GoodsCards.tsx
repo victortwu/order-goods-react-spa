@@ -20,21 +20,13 @@ interface GoodsCardsProps {
   headerActions?: ReactNode;
 }
 
-export const GoodsCards = ({
-  items,
-  listIds,
-  onAdd,
-  filter,
-  headerActions,
-}: GoodsCardsProps) => {
+export const GoodsCards = ({ items, listIds, onAdd, filter, headerActions }: GoodsCardsProps) => {
   const [staged, setStaged] = useState<StagedState>({});
 
   const getStaged = (item: OrderItem) =>
     staged[item.id] ?? {
       qty: 0,
-      unitType: item.productData.defaultToUnit
-        ? ("unit" as UnitType)
-        : ("case" as UnitType),
+      unitType: item.productData.defaultToUnit ? ("unit" as UnitType) : ("case" as UnitType),
     };
 
   const stageQty = (item: OrderItem, qty: number) =>
@@ -72,10 +64,7 @@ export const GoodsCards = ({
                 <Box float="right">
                   <SpaceBetween direction="horizontal" size="xs">
                     {hasQty && (
-                      <Button
-                        variant="primary"
-                        onClick={() => onAdd({ ...item, qty, unitType })}
-                      >
+                      <Button variant="primary" onClick={() => onAdd({ ...item, qty, unitType })}>
                         Add {qtyLabel}
                       </Button>
                     )}

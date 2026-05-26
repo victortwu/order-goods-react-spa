@@ -1,9 +1,4 @@
-import {
-  Header,
-  SpaceBetween,
-  Spinner,
-  Table,
-} from "@cloudscape-design/components";
+import { Header, SpaceBetween, Spinner, Table } from "@cloudscape-design/components";
 import { useGetGoods } from "../../api/hooks/useGetGoods";
 import { useUpdateProduct } from "../../api/hooks/useUpdateProduct";
 import { Product, VendorID } from "../../constants/types/product";
@@ -26,11 +21,7 @@ export const AdminProductsPage = () => {
 
   const products = data ?? [];
 
-  const handleSubmit = (
-    item: Product,
-    column: { id?: string },
-    value: unknown,
-  ) => {
+  const handleSubmit = (item: Product, column: { id?: string }, value: unknown) => {
     const field = column.id as keyof Product;
     if (!field || item[field] === value) return Promise.resolve();
 

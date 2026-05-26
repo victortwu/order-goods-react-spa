@@ -65,10 +65,7 @@ export const OrderListProvider = ({ children }: { children: ReactNode }) => {
     setOrderList([]);
   }, []);
 
-  const isInList = useCallback(
-    (id: string) => orderList.some((i) => i.id === id),
-    [orderList],
-  );
+  const isInList = useCallback((id: string) => orderList.some((i) => i.id === id), [orderList]);
 
   return (
     <OrderListContext.Provider

@@ -1,8 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  updateProduct,
-  UpdateProductPayload,
-} from "../data-fetching/updateProduct";
+import { updateProduct, UpdateProductPayload } from "../data-fetching/updateProduct";
 import { QUERY_KEYS } from "../../constants/types/queryKeys";
 
 export const useUpdateProduct = () => {

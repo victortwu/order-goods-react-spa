@@ -14,9 +14,7 @@ vi.mock("../../hooks/useOrderList", () => ({
 
 // --- Helpers ---
 
-const setOrderList = (
-  items: { id: string; productName: string; qty: number }[],
-) => {
+const setOrderList = (items: { id: string; productName: string; qty: number }[]) => {
   mockOrderList.length = 0;
   mockOrderList.push(...items);
 };

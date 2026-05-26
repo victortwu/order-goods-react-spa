@@ -1,7 +1,4 @@
-import {
-  TopNavigation,
-  TopNavigationProps,
-} from "@cloudscape-design/components";
+import { TopNavigation, TopNavigationProps } from "@cloudscape-design/components";
 import { APP_NAME } from "../../constants/globalConstants";
 import { useDarkMode } from "../../contexts/ThemeProvider/ThemeContext";
 import { useNavigate } from "react-router";
