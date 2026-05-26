@@ -32,11 +32,11 @@ export const GoodsCards = ({
   const getStaged = (item: OrderItem) =>
     staged[item.id] ?? { qty: 0, unitType: item.productData.defaultToUnit ? "unit" as UnitType : "case" as UnitType };
 
-  const stageQty = (id: string, qty: number) =>
-    setStaged((prev) => ({ ...prev, [id]: { ...prev[id], qty } }));
+  const stageQty = (item: OrderItem, qty: number) =>
+    setStaged((prev) => ({ ...prev, [item.id]: { ...getStaged(item), qty } }));
 
-  const stageUnitType = (id: string, unitType: UnitType) =>
-    setStaged((prev) => ({ ...prev, [id]: { ...prev[id], unitType } }));
+  const stageUnitType = (item: OrderItem, unitType: UnitType) =>
+    setStaged((prev) => ({ ...prev, [item.id]: { ...getStaged(item), unitType } }));
 
   return (
     <Cards
@@ -76,8 +76,8 @@ export const GoodsCards = ({
                   )}
                   <GoodsButtonGroup
                     qty={qty}
-                    onQtyChange={(q) => stageQty(item.id, q)}
-                    onUnitTypeChange={(u) => stageUnitType(item.id, u)}
+                    onQtyChange={(q) => stageQty(item, q)}
+                    onUnitTypeChange={(u) => stageUnitType(item, u)}
                   />
                 </SpaceBetween>
               );
