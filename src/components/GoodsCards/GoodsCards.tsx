@@ -12,8 +12,6 @@ import { GoodsButtonGroup } from "../GoodsButtonGroup/GoodsButtonGroup";
 
 type StagedState = Record<string, { qty: number; unitType: UnitType }>;
 
-const DEFAULT_STAGED = { qty: 0, unitType: "case" as UnitType };
-
 interface GoodsCardsProps {
   items: OrderItem[];
   listIds: Set<string>;
@@ -31,13 +29,14 @@ export const GoodsCards = ({
 }: GoodsCardsProps) => {
   const [staged, setStaged] = useState<StagedState>({});
 
-  const getStaged = (id: string) => staged[id] ?? DEFAULT_STAGED;
+  const getStaged = (item: OrderItem) =>
+    staged[item.id] ?? { qty: 0, unitType: item.productData.defaultToUnit ? "unit" as UnitType : "case" as UnitType };
 
   const stageQty = (id: string, qty: number) =>
-    setStaged((prev) => ({ ...prev, [id]: { ...getStaged(id), qty } }));
+    setStaged((prev) => ({ ...prev, [id]: { ...prev[id], qty } }));
 
   const stageUnitType = (id: string, unitType: UnitType) =>
-    setStaged((prev) => ({ ...prev, [id]: { ...getStaged(id), unitType } }));
+    setStaged((prev) => ({ ...prev, [id]: { ...prev[id], unitType } }));
 
   return (
     <Cards
@@ -59,7 +58,7 @@ export const GoodsCards = ({
                 return <StatusIndicator type="success">Added</StatusIndicator>;
               }
 
-              const { qty, unitType } = getStaged(item.id);
+              const { qty, unitType } = getStaged(item);
               const hasQty = qty > 0;
               const qtyLabel = `${qty} ${unitType}${qty !== 1 ? "s" : ""}`;
 

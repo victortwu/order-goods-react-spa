@@ -16,4 +16,5 @@ export interface Product {
   description?: string;
   tags?: string[];
   hide?: boolean;
+  defaultToUnit?: boolean;
 }
