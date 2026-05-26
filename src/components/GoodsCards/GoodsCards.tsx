@@ -30,19 +30,25 @@ export const GoodsCards = ({
   const [staged, setStaged] = useState<StagedState>({});
 
   const getStaged = (item: OrderItem) =>
-    staged[item.id] ?? { qty: 0, unitType: item.productData.defaultToUnit ? "unit" as UnitType : "case" as UnitType };
+    staged[item.id] ?? {
+      qty: 0,
+      unitType: item.productData.defaultToUnit
+        ? ("unit" as UnitType)
+        : ("case" as UnitType),
+    };
 
   const stageQty = (item: OrderItem, qty: number) =>
     setStaged((prev) => ({ ...prev, [item.id]: { ...getStaged(item), qty } }));
 
   const stageUnitType = (item: OrderItem, unitType: UnitType) =>
-    setStaged((prev) => ({ ...prev, [item.id]: { ...getStaged(item), unitType } }));
+    setStaged((prev) => ({
+      ...prev,
+      [item.id]: { ...getStaged(item), unitType },
+    }));
 
   return (
     <Cards
-      header={
-        <Header actions={headerActions}>Goods</Header>
-      }
+      header={<Header actions={headerActions}>Goods</Header>}
       filter={filter}
       ariaLabels={{
         itemSelectionLabel: (_, t) => `select ${t.productName}`,
@@ -63,23 +69,23 @@ export const GoodsCards = ({
               const qtyLabel = `${qty} ${unitType}${qty !== 1 ? "s" : ""}`;
 
               return (
-                <SpaceBetween size="xs" direction="horizontal" alignItems="center">
-                  {hasQty ? (
-                    <Button
-                      variant="primary"
-                      onClick={() => onAdd({ ...item, qty, unitType })}
-                    >
-                      Add {qtyLabel}
-                    </Button>
-                  ) : (
-                    <Box />
-                  )}
-                  <GoodsButtonGroup
-                    qty={qty}
-                    onQtyChange={(q) => stageQty(item, q)}
-                    onUnitTypeChange={(u) => stageUnitType(item, u)}
-                  />
-                </SpaceBetween>
+                <Box float="right">
+                  <SpaceBetween direction="horizontal" size="xs">
+                    {hasQty && (
+                      <Button
+                        variant="primary"
+                        onClick={() => onAdd({ ...item, qty, unitType })}
+                      >
+                        Add {qtyLabel}
+                      </Button>
+                    )}
+                    <GoodsButtonGroup
+                      qty={qty}
+                      onQtyChange={(q) => stageQty(item, q)}
+                      onUnitTypeChange={(u) => stageUnitType(item, u)}
+                    />
+                  </SpaceBetween>
+                </Box>
               );
             },
           },
