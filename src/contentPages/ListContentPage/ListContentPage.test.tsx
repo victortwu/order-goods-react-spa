@@ -33,6 +33,14 @@ vi.mock("../../api/hooks/useCreateList", () => ({
   }),
 }));
 
+vi.mock("../../contexts/NotificationContext/NotificationContext", () => ({
+  useNotifications: () => ({
+    flashItems: [],
+    startTracking: vi.fn(),
+    addFlash: vi.fn(),
+  }),
+}));
+
 // --- Helpers ---
 
 const makeItem = (id: string, qty = 2): OrderItem => ({

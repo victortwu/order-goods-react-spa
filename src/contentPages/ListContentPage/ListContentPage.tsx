@@ -2,11 +2,13 @@ import { Alert, Box, Button, Header, Modal, SpaceBetween } from "@cloudscape-des
 import { OrderListView } from "../../components/OrderListView/OrderListView";
 import { useOrderList } from "../../hooks/useOrderList";
 import { useCreateList } from "../../api/hooks/useCreateList";
+import { useNotifications } from "../../contexts/NotificationContext/NotificationContext";
 import { useState, useCallback } from "react";
 
 export const ListsContentPage = () => {
   const { orderList, updateItem, removeItem, clearList } = useOrderList();
   const { mutate, isPending, isError, reset } = useCreateList();
+  const { startTracking } = useNotifications();
   const [showSuccess, setShowSuccess] = useState(false);
   const [showClearModal, setShowClearModal] = useState(false);
 
@@ -16,9 +18,11 @@ export const ListsContentPage = () => {
     mutate(
       { list: orderList },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           clearList();
           setShowSuccess(true);
+          const { id } = data as { id: string };
+          startTracking(id);
         },
       },
     );
