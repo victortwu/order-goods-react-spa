@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useRef, useCallback, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { getListById } from "../api/data-fetching/getListById";
 import { VendorStatus, VendorStatusEntry } from "../constants/types/orderRecord";
 
