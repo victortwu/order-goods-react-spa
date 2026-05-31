@@ -57,8 +57,8 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const onVendorComplete = useCallback(
-    (vendorId: string, entry: VendorStatusEntry) => {
-      const id = `${trackedOrderId}-${vendorId}`;
+    (orderId: string, vendorId: string, entry: VendorStatusEntry) => {
+      const id = `${orderId}-${vendorId}`;
       setFlashItems((prev) => {
         if (prev.some((item) => item.id === id)) return prev;
         return [
@@ -72,7 +72,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
               null,
               getFlashMessage(vendorId, entry.status),
               createElement("br"),
-              createElement("small", null, `Order ID: ${trackedOrderId}`),
+              createElement("small", null, `Order ID: ${orderId}`),
             ),
             dismissible: true,
             onDismiss: () => dismissFlash(id),
@@ -81,7 +81,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
         ];
       });
     },
-    [trackedOrderId, dismissFlash],
+    [dismissFlash],
   );
 
   const startTracking = useCallback((orderId: string) => {

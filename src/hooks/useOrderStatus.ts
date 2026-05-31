@@ -23,7 +23,7 @@ const isFinal = (status: VendorStatus) => FINAL_STATUSES.includes(status);
 
 export const useOrderStatus = (
   orderId: string | null,
-  onVendorComplete: (vendorId: string, entry: VendorStatusEntry) => void,
+  onVendorComplete: (orderId: string, vendorId: string, entry: VendorStatusEntry) => void,
 ) => {
   const previousStatuses = useRef<Record<string, VendorStatus>>({});
 
@@ -41,16 +41,16 @@ export const useOrderStatus = (
 
   useEffect(() => {
     const vendorStatuses = query.data?.vendorStatuses;
-    if (!vendorStatuses) return;
+    if (!vendorStatuses || !orderId) return;
 
     for (const [vendorId, entry] of Object.entries(vendorStatuses)) {
       const prev = previousStatuses.current[vendorId];
       if (prev !== entry.status && isFinal(entry.status)) {
-        onVendorComplete(vendorId, entry);
+        onVendorComplete(orderId, vendorId, entry);
       }
       previousStatuses.current[vendorId] = entry.status;
     }
-  }, [query.data?.vendorStatuses, onVendorComplete]);
+  }, [query.data?.vendorStatuses, onVendorComplete, orderId]);
 
   return query;
 };
