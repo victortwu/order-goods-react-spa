@@ -38,7 +38,7 @@ const getFlashMessage = (vendorId: string, status: VendorStatus): string => {
   switch (status) {
     case "success":
     case "email_sent":
-      return `${name} order is ready for your review.`;
+      return `${name} order is ready for review.`;
     case "partial_success":
       return `${name} order completed with some items not added.`;
     case "not_configured":

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
 import { getListById } from "../api/data-fetching/getListById";
 import { VendorStatus, VendorStatusEntry } from "../constants/types/orderRecord";
 
@@ -25,8 +25,6 @@ export const useOrderStatus = (
   orderId: string | null,
   onVendorComplete: (orderId: string, vendorId: string, entry: VendorStatusEntry) => void,
 ) => {
-  const previousStatuses = useRef<Record<string, VendorStatus>>({});
-
   const query = useQuery({
     queryKey: ["orderStatus", orderId],
     queryFn: () => getListById(orderId!),
@@ -44,11 +42,9 @@ export const useOrderStatus = (
     if (!vendorStatuses || !orderId) return;
 
     for (const [vendorId, entry] of Object.entries(vendorStatuses)) {
-      const prev = previousStatuses.current[vendorId];
-      if (prev !== entry.status && isFinal(entry.status)) {
+      if (isFinal(entry.status)) {
         onVendorComplete(orderId, vendorId, entry);
       }
-      previousStatuses.current[vendorId] = entry.status;
     }
   }, [query.data?.vendorStatuses, onVendorComplete, orderId]);
 
