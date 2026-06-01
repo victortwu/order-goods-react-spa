@@ -66,7 +66,7 @@ export const ListsContentPage = () => {
           `| ${calculateTotalUnits()} pkg${calculateTotalUnits() > 1 ? "s" : ""}`
         }
       >
-        Item List
+        Crate
       </Header>
 
       {orderList.length === 0 && !showSuccess ? (

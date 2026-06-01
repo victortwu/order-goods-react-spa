@@ -44,6 +44,6 @@ describe("<OrderListPopover />", () => {
     render(<OrderListPopover />);
 
     // assert
-    expect(screen.getByText("Items: 2")).toBeInTheDocument();
+    expect(screen.getByText("2")).toBeInTheDocument();
   });
 });

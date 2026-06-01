@@ -28,7 +28,8 @@ describe("<CustomSideNavigation />", () => {
     // assert
     expect(getByText(APP_NAME)).toBeInTheDocument();
     expect(getByText("Goods")).toBeInTheDocument();
-    expect(getByText("List")).toBeInTheDocument();
+    expect(getByText("Crate")).toBeInTheDocument();
+    expect(getByText("Orders")).toBeInTheDocument();
     expect(queryByText("Admin")).not.toBeInTheDocument();
   });
 
