@@ -7,7 +7,7 @@ import {
   Link,
 } from "@cloudscape-design/components";
 import { useGetRecentLists } from "../../api/hooks/useGetRecentLists";
-import { OrderRecord, VendorStatus } from "../../constants/types/orderRecord";
+import { VendorStatus } from "../../constants/types/orderRecord";
 import { useNavigate } from "react-router";
 import { CopyableId } from "../../components/CopyableId/CopyableId";
 
